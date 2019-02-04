@@ -83,11 +83,10 @@ const copilot = ({
 
     setCurrentStep = async (step: Step, move?: boolean = true): void => {
       await this.setState({ currentStep: step })
-      this.eventEmitter.emit('stepChange', step)
-
       if (move) {
-        this.moveToCurrentStep()
+        await this.moveToCurrentStep()
       }
+      this.eventEmitter.emit('stepChange', step)
     }
 
     setVisibility = (visible: boolean): void =>
@@ -177,6 +176,8 @@ const copilot = ({
           <WrappedComponent
             {...this.props}
             start={this.start}
+            stop={this.stop}
+            setVisibility={this.setVisibility}
             currentStep={this.state.currentStep}
             visible={this.state.visible}
             copilotEvents={this.eventEmitter}
