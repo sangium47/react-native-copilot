@@ -1,44 +1,45 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import type { CopilotContext } from '../types';
+import type { CopilotContext } from '../types'
 
 type Props = {
   name: string,
   text: string,
   order: number,
+  top: number,
   active?: boolean,
   _copilot: CopilotContext,
   children: React$Element
-};
+}
 
 class ConnectedCopilotStep extends Component<Props> {
   static defaultProps = {
-    active: true,
-  };
+    active: true
+  }
 
   componentDidMount() {
     if (this.props.active) {
-      this.register();
+      this.register()
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.active !== this.props.active) {
       if (nextProps.active) {
-        this.register();
+        this.register()
       } else {
-        this.unregister();
+        this.unregister()
       }
     }
   }
 
   componentWillUnmount() {
-    this.unregister();
+    this.unregister()
   }
 
   setNativeProps(obj) {
-    this.wrapper.setNativeProps(obj);
+    this.wrapper.setNativeProps(obj)
   }
 
   register() {
@@ -46,20 +47,27 @@ class ConnectedCopilotStep extends Component<Props> {
       name: this.props.name,
       text: this.props.text,
       order: this.props.order,
+      top: this.props.top,
       target: this,
-      wrapper: this.wrapper,
-    });
+      wrapper: this.wrapper
+    })
   }
 
   unregister() {
-    this.props._copilot.unregisterStep(this.props.name);
+    this.props._copilot.unregisterStep(this.props.name)
   }
 
   measure() {
-    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
-      return new Promise(resolve => resolve({
-        x: 0, y: 0, width: 0, height: 0,
-      }));
+    if (typeof __TEST__ !== 'undefined' && __TEST__) {
+      // eslint-disable-line no-undef
+      return new Promise(resolve =>
+        resolve({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0
+        })
+      )
     }
 
     return new Promise((resolve, reject) => {
@@ -67,28 +75,34 @@ class ConnectedCopilotStep extends Component<Props> {
         // Wait until the wrapper element appears
         if (this.wrapper.measure) {
           this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({
-              x, y, width, height,
-            }),
-            reject,
-          );
+            (ox, oy, width, height, x, y) =>
+              resolve({
+                x,
+                y,
+                width,
+                height
+              }),
+            reject
+          )
         } else {
-          requestAnimationFrame(measure);
+          requestAnimationFrame(measure)
         }
-      };
+      }
 
-      requestAnimationFrame(measure);
-    });
+      requestAnimationFrame(measure)
+    })
   }
 
   render() {
     const copilot = {
-      ref: (wrapper) => { this.wrapper = wrapper; },
-      onLayout: () => { }, // Android hack
-    };
+      ref: wrapper => {
+        this.wrapper = wrapper
+      },
+      onLayout: () => {} // Android hack
+    }
 
-    return React.cloneElement(this.props.children, { copilot });
+    return React.cloneElement(this.props.children, { copilot })
   }
 }
 
-export default ConnectedCopilotStep;
+export default ConnectedCopilotStep
