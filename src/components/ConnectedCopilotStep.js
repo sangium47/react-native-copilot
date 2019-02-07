@@ -48,6 +48,7 @@ class ConnectedCopilotStep extends Component<Props> {
       text: this.props.text,
       order: this.props.order,
       top: this.props.top,
+      measure: this.measure(),
       target: this,
       wrapper: this.wrapper
     })
