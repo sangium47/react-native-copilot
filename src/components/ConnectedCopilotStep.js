@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 
+import get from 'lodash/get'
 import type { CopilotContext } from '../types'
 
 type Props = {
@@ -74,7 +75,7 @@ class ConnectedCopilotStep extends Component<Props> {
     return new Promise((resolve, reject) => {
       const measure = () => {
         // Wait until the wrapper element appears
-        if (this.wrapper.measure) {
+        if (get(this.wrapper, 'measure', false)) {
           this.wrapper.measure(
             (ox, oy, width, height, x, y) =>
               resolve({
